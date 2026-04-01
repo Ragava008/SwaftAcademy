@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Swaft — Exceptional personal tutoring tailored to your learning style. Private sessions, progress tracking, and dedicated support.">
+  <title>Swaft Academy — Premium Personal Tutoring</title>
+  <link rel="stylesheet" href="css/main.css">
+  <script src="js/data-store.js" defer></script>
+  <script src="js/app.js" defer></script>
+  <style>
+    /* ===== LANDING PAGE SPECIFIC ===== */
+    .landing-body {
+      background: var(--bg-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated background */
+    .bg-orbs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .orb-1 {
+      width: 500px;
+      height: 500px;
+      background: #6C63FF;
+      top: -100px;
+      left: -100px;
+      animation-delay: 0s;
+    }
+
+    .orb-2 {
+      width: 400px;
+      height: 400px;
+      background: #00D4AA;
+      top: 30%;
+      right: -80px;
+      animation-delay: 3s;
+    }
+
+    .orb-3 {
+      width: 350px;
+      height: 350px;
+      background: #FF6B6B;
+      bottom: 10%;
+      left: 30%;
+      animation-delay: 5s;
+    }
+
+    .orb-4 {
+      width: 300px;
+      height: 300px;
+      background: #FF9A3C;
+      top: 60%;
+      right: 30%;
+      animation-delay: 2s;
+    }
+
+    /* Nav */
+    .landing-nav {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--border-light);
+      backdrop-filter: blur(20px);
+      background: rgba(10, 11, 20, 0.8);
+      position: sticky;
+      top: 0;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-logo-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--grad-primary);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: var(--shadow-glow-sm);
+    }
+
+    .nav-logo-text {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 900;
+    }
+
+    .nav-logo-sub {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-cta {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    /* Enhanced Role Cards */
+    .role-card {
+      padding: 3rem 1.5rem;
+      border-radius: var(--radius-xl);
+      background: var(--bg-glass);
+      border: 1px solid var(--border-light);
+      transition: var(--transition);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .role-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--primary);
+      box-shadow: var(--shadow-glow);
+      background: var(--bg-card-hover);
+    }
+
+    .role-icon {
+      font-size: 3.5rem;
+      transition: var(--transition);
+    }
+
+    .role-card:hover .role-icon {
+      transform: scale(1.1);
+    }
+
+    .role-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    /* Auto-Login Section */
+    #returnSection {
+       display: none;
+       background: rgba(108, 99, 255, 0.1);
+       border: 1px solid rgba(108, 99, 255, 0.2);
+       border-radius: var(--radius-lg);
+       padding: 1rem 2rem;
+       margin-top: 2rem;
+       animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* New Redesign Layout */
+    .hero-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4rem;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 4rem;
+      min-height: calc(100vh - 120px);
+    }
+
+    .hero-text {
+      flex: 1;
+      text-align: left;
+    }
+
+    .hero-text h1 {
+      font-size: clamp(2rem, 4.5vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-text p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 500px;
+      margin-bottom: 2rem;
+    }
+
+    .portal-side {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* Compact Horizontal Role Cards */
+    .role-tile {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1.5rem 2rem;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      transition: var(--transition);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .role-tile:hover {
+      transform: translateX(10px);
+      border-color: var(--primary);
+      background: var(--bg-card-hover);
+      box-shadow: var(--shadow-glow-sm);
+    }
+
+    .role-tile .tile-icon {
+      font-size: 2.5rem;
+    }
+
+    .role-tile .tile-info {
+      flex: 1;
+    }
+
+    .role-tile h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .role-tile p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-wrapper {
+        flex-direction: column;
+        padding: 4rem 2rem;
+        text-align: center;
+        gap: 2rem;
+      }
+      .hero-text { text-align: center; }
+      .hero-text p { margin: 0 auto 2rem; }
+      .role-tile:hover { transform: translateY(-5px); }
+    }
+
+    @media (max-width: 768px) {
+      .landing-nav {
+        padding: 1rem 1.5rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero,
+      .section {
+        padding: 3rem 1.5rem;
+      }
+
+      .cta-section {
+        padding: 2rem 1.5rem;
+      }
+
+      .cta-card {
+        padding: 2rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="landing-body">
+
+  <!-- Animated Background Orbs -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="landing-nav">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">🎓</div>
+      <div>
+        <div class="nav-logo-text gradient-text">Swaft Academy</div>
+        <div class="nav-logo-sub">Premium Personal Tutoring</div>
+      </div>
+    </div>
+    <div class="nav-links">
+    </div>
+
+  </nav>
+
+  <!-- Main Redesigned Content -->
+  <main class="hero-wrapper">
+    <!-- Left: Hero Content -->
+    <div class="hero-text">
+      <div class="hero-badge animate-pulse" style="margin-bottom: 1.5rem; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 1rem; background: rgba(108, 99, 255, 0.15); border: 1px solid rgba(108, 99, 255, 0.3); border-radius: var(--radius-full); font-size: 0.82rem; font-weight: 600; color: var(--primary-light);">✨ Swaft Academy</div>
+      <h1>Unlocking Potential <br><span class="gradient-text">Through Personal Growth</span></h1>
+      <p>Personalized learning journeys designed exclusively for your success. Private sessions, progress tracking, and dedicated support.</p>
+      
+
+      
+      <!-- Quick Return Button (Shown if logged in) -->
+      <div id="returnSection" style="margin-top:0; text-align:left">
+        <div style="display:flex; align-items:center; gap:1.25rem; background: rgba(108, 99, 255, 0.1); border: 1px solid rgba(108, 99, 255, 0.2); border-radius: var(--radius-lg); padding: 1.25rem;">
+          <div style="flex:1">
+            <div id="returnText" style="font-weight:700; font-size:1.1rem">Welcome back, अर्जुन!</div>
+            <div style="font-size:0.85rem; color:var(--text-secondary)">Your dashboard is ready.</div>
+          </div>
+          <a id="returnBtn" href="dashboard.html" class="btn btn-primary" style="padding: 0.8rem 1.5rem">Continue →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Portal Selection -->
+    <div class="portal-side">
+      <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Access Portals</div>
+      
+      <div class="role-tile" onclick="openLoginModal('tutor')">
+        <div class="tile-icon">🧑‍🏫</div>
+        <div class="tile-info">
+          <h3 class="gradient-text">Private Tutor</h3>
+          <p>Manage students, schedules & content</p>
+        </div>
+        <div class="btn btn-sm btn-primary">Login</div>
+      </div>
+
+      <div class="role-tile" onclick="openLoginModal('student')">
+        <div class="tile-icon">🧑‍🎓</div>
+        <div class="tile-info">
+          <h3 style="color:var(--secondary)">Student Portal</h3>
+          <p>Access library, practice & progress</p>
+        </div>
+        <div class="btn btn-sm btn-secondary">Login</div>
+      </div>
+
+      <div class="role-tile" onclick="openLoginModal('parent')">
+        <div class="tile-icon">👪</div>
+        <div class="tile-info">
+          <h3 style="color:var(--accent-orange)">Parent Portal</h3>
+          <p>Track performance & monitor updates</p>
+        </div>
+        <div class="btn btn-sm btn-secondary">Login</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== STUDENT / PARENT LOGIN MODAL ===== -->
+  <div id="loginModal" style="
+    display:none;position:fixed;inset:0;z-index:1000;
+    background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);
+    align-items:center;justify-content:center;
+  ">
+    <div style="
+      background:var(--bg-card,#12142a);border:1px solid rgba(108,99,255,0.35);
+      border-radius:20px;padding:2.25rem 2.5rem;width:100%;max-width:420px;
+      box-shadow:0 20px 60px rgba(0,0,0,0.5);position:relative;
+      animation:modalIn .25s ease;
+    ">
+      <!-- Close -->
+      <button onclick="closeLoginModal()" style="
+        position:absolute;top:1rem;right:1rem;
+        background:none;border:none;color:#A0A8CC;font-size:1.3rem;cursor:pointer;
+        line-height:1;padding:0.25rem;
+      ">✕</button>
+
+      <!-- Icon + Title -->
+      <div style="text-align:center;margin-bottom:1.75rem">
+        <div id="loginModalIcon" style="font-size:2.75rem;margin-bottom:0.6rem">👨‍🎓</div>
+        <h2 id="loginModalTitle" style="font-size:1.35rem;font-weight:800;margin:0 0 0.3rem">
+          Student Login
+        </h2>
+        <p style="color:#A0A8CC;font-size:0.85rem;margin:0">Enter your username and PIN to continue</p>
+      </div>
+
+      <!-- Form -->
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <div>
+          <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.4rem;color:#A0A8CC;text-transform:uppercase;letter-spacing:.05em">Username</label>
+          <input id="loginUsername" type="text" placeholder="Your username (e.g. arjun)" autocomplete="username"
+            style="width:100%;box-sizing:border-box;padding:0.75rem 1rem;border-radius:10px;
+            background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
+            color:#fff;font-size:0.95rem;outline:none;"
+            onkeydown="if(event.key==='Enter')document.getElementById('loginPin').focus()"
+          >
+        </div>
+        <div>
+          <label style="display:block;font-size:0.8rem;font-weight:600;margin-bottom:0.4rem;color:#A0A8CC;text-transform:uppercase;letter-spacing:.05em">4-Digit PIN</label>
+          <input id="loginPin" type="password" placeholder="••••" maxlength="4" inputmode="numeric"
+            style="width:100%;box-sizing:border-box;padding:0.75rem 1rem;border-radius:10px;
+            background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);
+            color:#fff;font-size:1.2rem;letter-spacing:0.3em;outline:none;"
+            onkeydown="if(event.key==='Enter')submitLogin()"
+          >
+        </div>
+        <div id="loginError" style="display:none;background:rgba(255,107,107,0.12);border:1px solid rgba(255,107,107,0.3);border-radius:8px;padding:0.6rem 0.9rem;font-size:0.84rem;color:#ff8080"></div>
+        <button onclick="submitLogin()" style="
+          width:100%;padding:0.85rem;border:none;cursor:pointer;
+          background:linear-gradient(135deg,#6C63FF,#8B85FF);
+          color:#fff;font-weight:700;font-size:1rem;border-radius:12px;
+          box-shadow:0 4px 20px rgba(108,99,255,0.35);transition:opacity .2s;
+        " onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+          Login →
+        </button>
+        <p style="text-align:center;font-size:0.78rem;color:#A0A8CC;margin:0">
+          First time? Ask your tutor for your username &amp; PIN.
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div style="font-weight:700;font-size:1rem;margin-bottom:0.5rem" class="gradient-text">Swaft Academy</div>
+    <div>© 2026 Swaft Academy. Exceptional private tutoring.</div>
+    <div style="margin-top:0.5rem;font-size:0.85rem;font-style:italic;color:var(--text-secondary);">"Empowering growth through dedicated and personalized learning."</div>
+  </footer>
+
+  <script>
+    // ======= SESSION AUTO-DETECTION =======
+    document.addEventListener('DOMContentLoaded', () => {
+      const lastSession = localStorage.getItem('swaft_last_session');
+      if (lastSession) {
+        try {
+          const session = JSON.parse(lastSession);
+          // Show the return section
+          const section = document.getElementById('returnSection');
+          const text = document.getElementById('returnText');
+          const btn = document.getElementById('returnBtn');
+          
+          if (section && session.name) {
+            section.style.display = 'block';
+            text.textContent = `Welcome back, ${session.name}!`;
+            btn.href = `dashboard.html?role=${session.role}${session.studentId ? '&studentId='+session.studentId : ''}`;
+          }
+        } catch(e) {}
+      }
+    });
+
+    let _loginRole = 'student';
+
+    function openLoginModal(role) {
+      _loginRole = role;
+      const modal = document.getElementById('loginModal');
+      const icon  = document.getElementById('loginModalIcon');
+      const title = document.getElementById('loginModalTitle');
+      if (role === 'parent') {
+        icon.textContent  = '👨‍👩‍👦';
+        title.textContent = 'Parent Login';
+      } else if (role === 'tutor') {
+        icon.textContent  = '🧑‍🏫';
+        title.textContent = 'Tutor Login';
+      } else {
+        icon.textContent  = '👨‍🎓';
+        title.textContent = 'Student Login';
+      }
+      document.getElementById('loginUsername').value = '';
+      document.getElementById('loginPin').value      = '';
+      document.getElementById('loginError').style.display = 'none';
+      modal.style.display = 'flex';
+      setTimeout(() => document.getElementById('loginUsername').focus(), 80);
+    }
+
+    function closeLoginModal() {
+      document.getElementById('loginModal').style.display = 'none';
+    }
+
+    function submitLogin() {
+      const username = document.getElementById('loginUsername').value.trim();
+      const pin      = document.getElementById('loginPin').value.trim();
+      const errEl    = document.getElementById('loginError');
+
+      if (!username || !pin) {
+        errEl.textContent    = 'Please enter both username and PIN.';
+        errEl.style.display  = 'block';
+        return;
+      }
+
+      const student = Store_validateLogin(username, pin);
+      if (!student) {
+        errEl.textContent   = '❌ Incorrect username or PIN.';
+        errEl.style.display = 'block';
+        document.getElementById('loginPin').value = '';
+        return;
+      }
+
+      const sessionData = {
+        role: student.role === 'tutor' ? 'tutor' : _loginRole,
+        studentId: student.id || null,
+        name: student.name
+      };
+      localStorage.setItem('swaft_last_session', JSON.stringify(sessionData));
+
+      if (student.role === 'tutor') {
+        window.location.href = `dashboard.html?role=tutor`;
+      } else {
+        window.location.href = `dashboard.html?role=${_loginRole}&studentId=${student.id}`;
+      }
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLoginModal();
+    });
+  </script>
+</body>
+
+</html>
